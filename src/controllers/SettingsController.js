@@ -43,14 +43,14 @@ class SettingsController {
       }
     }
 
-    settings.aws_access_key_id = aws_access_key_id;
-    settings.aws_secret_access_key = aws_secret_access_key;
-    settings.aws_region = aws_region;
-    settings.mail_from = mail_from;
-    settings.sidebar_color = sidebar_color;
-    settings.sidebar_font_color = sidebar_font_color;
-    settings.ses_host = ses_host;
-    settings.ses_port = ses_port;
+    if (aws_access_key_id !== undefined) settings.aws_access_key_id = aws_access_key_id;
+    if (aws_secret_access_key !== undefined) settings.aws_secret_access_key = aws_secret_access_key;
+    if (aws_region !== undefined) settings.aws_region = aws_region;
+    if (mail_from !== undefined) settings.mail_from = mail_from;
+    if (sidebar_color !== undefined) settings.sidebar_color = sidebar_color;
+    if (sidebar_font_color !== undefined) settings.sidebar_font_color = sidebar_font_color;
+    if (ses_host !== undefined) settings.ses_host = ses_host;
+    if (ses_port !== undefined) settings.ses_port = ses_port;
 
     if (logo) {
       console.log('Logo filename:', logo.filename);
