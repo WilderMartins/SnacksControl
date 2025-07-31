@@ -10,6 +10,17 @@
   margin-bottom: 20px;
 }
 
+.kiosk-logo {
+  max-width: 150px;
+  max-height: 150px;
+  margin-bottom: 10px;
+}
+
+.kiosk-header h1,
+.kiosk-header h2 {
+  color: var(--primary-color, #333);
+}
+
 .scanner-container {
   position: relative;
   width: 100%;
