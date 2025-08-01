@@ -26,12 +26,23 @@ button:hover {
   background-color: #166fe5;
 }
 
-input {
+input, select, textarea {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ddd;
   margin-bottom: 10px;
   width: 100%;
+  box-sizing: border-box; /* To include padding and border in the width */
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 15px;
 }
 
 .container {
