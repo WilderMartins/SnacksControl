@@ -12,6 +12,7 @@ import Kiosk from './pages/Kiosk';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Categories from './pages/Categories';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -40,6 +41,7 @@ const Routes = () => (
       <PrivateRoute path="/reports" component={Reports} />
       <PrivateRoute path="/settings" component={Settings} />
       <PrivateRoute path="/categories" component={Categories} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>
