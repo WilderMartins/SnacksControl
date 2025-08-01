@@ -16,6 +16,9 @@ export default function Login({ history }) {
       try {
         const response = await api.get('/settings');
         setSettings(response.data);
+        if (response.data.login_method !== 'both') {
+          setLoginMethod(response.data.login_method);
+        }
       } catch (err) {
         console.error('Failed to load settings', err);
       }
@@ -30,8 +33,12 @@ export default function Login({ history }) {
       const payload = loginMethod === 'password' ? { email, password } : { email, otp };
       const response = await api.post('/sessions', payload);
       const { token, user } = response.data;
+      if (user.role === 'admin') {
+        setFeedback({ message: 'Acesse a página /admin para fazer login como administrador.', type: 'error' });
+        return;
+      }
       login(token, user);
-      history.push(user.role === 'admin' ? '/dashboard' : '/kiosk');
+      history.push('/kiosk');
     } catch (error) {
       setFeedback({ message: 'Falha no login, verifique suas credenciais.', type: 'error' });
     }
@@ -93,17 +100,19 @@ export default function Login({ history }) {
           </div>
         )}
         <button type="submit">Entrar</button>
-        <div className="login-toggle">
-          {loginMethod === 'password' ? (
-            <a href="#" onClick={() => setLoginMethod('otp')}>
-              Entrar com código OTP
-            </a>
-          ) : (
-            <a href="#" onClick={() => setLoginMethod('password')}>
-              Entrar com senha
-            </a>
-          )}
-        </div>
+        {settings.login_method === 'both' && (
+          <div className="login-toggle">
+            {loginMethod === 'password' ? (
+              <a href="#" onClick={() => setLoginMethod('otp')}>
+                Entrar com código OTP
+              </a>
+            ) : (
+              <a href="#" onClick={() => setLoginMethod('password')}>
+                Entrar com senha
+              </a>
+            )}
+          </div>
+        )}
       </form>
     </div>
   );

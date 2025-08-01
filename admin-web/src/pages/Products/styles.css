@@ -69,3 +69,8 @@
   width: 100%;
   max-width: 400px;
 }
+
+.out-of-stock {
+  color: #f44336;
+  font-weight: bold;
+}
