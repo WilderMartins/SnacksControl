@@ -51,6 +51,7 @@ class SettingsController {
     if (sidebar_font_color !== undefined) settings.sidebar_font_color = sidebar_font_color;
     if (ses_host !== undefined) settings.ses_host = ses_host;
     if (ses_port !== undefined) settings.ses_port = ses_port;
+    if (req.body.ses_ignore_tls !== undefined) settings.ses_ignore_tls = req.body.ses_ignore_tls;
 
     if (logo) {
       console.log('Logo filename:', logo.filename);

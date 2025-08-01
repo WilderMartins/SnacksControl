@@ -2,5 +2,6 @@
   "aws_access_key_id": "YOUR_AWS_ACCESS_KEY_ID",
   "aws_secret_access_key": "YOUR_AWS_SECRET_ACCESS_KEY",
   "aws_region": "us-east-1",
-  "mail_from": "noreply@example.com"
+  "mail_from": "noreply@example.com",
+  "ses_ignore_tls": false
 }
