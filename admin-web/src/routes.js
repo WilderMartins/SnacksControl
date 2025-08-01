@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { isAuthenticated } from './services/auth';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Products from './pages/Products';
@@ -31,6 +32,7 @@ const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={Login} />
+      <Route path="/admin" component={AdminLogin} />
       <PrivateRoute path="/dashboard" component={Dashboard} />
       <PrivateRoute path="/users" component={Users} />
       <PrivateRoute path="/products" component={Products} />

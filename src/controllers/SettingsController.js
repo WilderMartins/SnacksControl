@@ -52,6 +52,7 @@ class SettingsController {
     if (ses_host !== undefined) settings.ses_host = ses_host;
     if (ses_port !== undefined) settings.ses_port = ses_port;
     if (req.body.ses_ignore_tls !== undefined) settings.ses_ignore_tls = req.body.ses_ignore_tls;
+    if (req.body.login_method !== undefined) settings.login_method = req.body.login_method;
 
     if (logo) {
       console.log('Logo filename:', logo.filename);
