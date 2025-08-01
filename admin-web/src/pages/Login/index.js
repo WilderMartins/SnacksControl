@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { login } from '../../services/auth';
 import './styles.css';
 
 export default function Login({ history }) {
+  const [settings, setSettings] = useState({});
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
   const [loginMethod, setLoginMethod] = useState('password'); // 'password' or 'otp'
   const [feedback, setFeedback] = useState({ message: '', type: '' });
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const response = await api.get('/settings');
+        setSettings(response.data);
+      } catch (err) {
+        console.error('Failed to load settings', err);
+      }
+    }
+    loadSettings();
+  }, []);
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -37,6 +50,12 @@ export default function Login({ history }) {
 
   return (
     <div className="login-container">
+      <div className="login-header">
+        {settings.logo_path && (
+          <img src={settings.logo_path} alt="Logo" className="login-logo" />
+        )}
+        <h1>EXA Snacks</h1>
+      </div>
       <form onSubmit={handleLogin}>
         <h2>Acesse o quiosque</h2>
 

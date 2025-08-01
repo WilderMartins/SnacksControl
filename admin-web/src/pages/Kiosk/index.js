@@ -8,6 +8,8 @@ export default function Kiosk() {
   const history = useHistory();
   const [settings, setSettings] = useState({});
   const [credits, setCredits] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [, setConsumptions] = useState([]); // Apenas o setter é usado para o histórico
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -26,6 +28,11 @@ export default function Kiosk() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSettings(settingsResponse.data);
+
+      const productsResponse = await api.get('/products', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProducts(productsResponse.data);
 
       const consumptionsResponse = await api.get(
         `/consumptions?user_id=${user.id}`,
@@ -160,7 +167,30 @@ export default function Kiosk() {
       </button>
 
       <div className="manual-input-container">
-        {/* ... (mesmo formulário manual) ... */}
+        <input
+          type="text"
+          placeholder="Pesquisar produto por nome ou código de barras"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <ul className="product-selection-list">
+          {products
+            .filter((p) => {
+              const term = searchTerm.toLowerCase();
+              return (
+                p.name.toLowerCase().includes(term) ||
+                p.barcode.toLowerCase().includes(term)
+              );
+            })
+            .map((product) => (
+              <li
+                key={product.id}
+                onClick={() => processConsumption(product.barcode)}
+              >
+                {product.name}
+              </li>
+            ))}
+        </ul>
       </div>
 
       <div className="consumptions-history">

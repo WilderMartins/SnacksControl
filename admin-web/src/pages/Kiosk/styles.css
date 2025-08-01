@@ -109,3 +109,22 @@
   cursor: pointer;
   font-size: 1rem;
 }
+
+.product-selection-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.product-selection-list li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.product-selection-list li:hover {
+  background-color: #f0f0f0;
+}
