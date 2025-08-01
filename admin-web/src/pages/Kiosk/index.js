@@ -126,8 +126,8 @@ export default function Kiosk() {
       }}
     >
       <div className="kiosk-header">
-        {settings.logo_url && (
-          <img src={settings.logo_url} alt="Logo" className="kiosk-logo" />
+        {settings.logo_path && (
+          <img src={settings.logo_path} alt="Logo" className="kiosk-logo" />
         )}
         <h1>Quiosque</h1>
         <h2>Créditos restantes: {credits}</h2>
