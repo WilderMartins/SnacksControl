@@ -10,6 +10,7 @@ export default function Kiosk() {
   const [credits, setCredits] = useState(0);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [productToConfirm, setProductToConfirm] = useState(null);
   const [, setConsumptions] = useState([]); // Apenas o setter é usado para o histórico
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -57,49 +58,63 @@ export default function Kiosk() {
     }
   }, []);
 
-  const processConsumption = useCallback(
-    async (barcode) => {
-      if (!barcode || isPaused) return;
+  const handleConfirmConsumption = useCallback(async () => {
+    if (!productToConfirm || isPaused) return;
 
-      setIsPaused(true);
-      try {
-        const token = localStorage.getItem('token');
-        const response = await api.post(
-          '/consumptions',
-          { barcode },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setLastConsumed({
-          product: response.data.product,
-          status: 'success',
-        });
-        loadData();
-      } catch (error) {
-        let errorMessage = 'Ocorreu um erro.';
-        if (error.response) {
-          errorMessage =
-            error.response.data.error || 'Erro desconhecido do servidor.';
-        } else if (error.request) {
-          errorMessage =
-            'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
-        } else {
-          errorMessage = error.message;
-        }
-        setLastConsumed({ product: { name: errorMessage }, status: 'error' });
-      } finally {
-        setTimeout(() => {
-          setLastConsumed(null);
-          setIsPaused(false);
-        }, 3000);
+    if (credits <= 0) {
+      setLastConsumed({ product: { name: 'Você não tem créditos suficientes.' }, status: 'error' });
+      setProductToConfirm(null);
+      setTimeout(() => {
+        setLastConsumed(null);
+      }, 3000);
+      return;
+    }
+
+    setIsPaused(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.post(
+        '/consumptions',
+        { barcode: productToConfirm.barcode },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setLastConsumed({
+        product: response.data.product,
+        status: 'success',
+      });
+      loadData();
+    } catch (error) {
+      let errorMessage = 'Ocorreu um erro.';
+      if (error.response) {
+        errorMessage =
+          error.response.data.error || 'Erro desconhecido do servidor.';
+      } else if (error.request) {
+        errorMessage =
+          'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+      } else {
+        errorMessage = error.message;
       }
-    },
-    [isPaused, loadData]
-  );
+      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
+    } finally {
+      setProductToConfirm(null);
+      setTimeout(() => {
+        setLastConsumed(null);
+        setIsPaused(false);
+      }, 3000);
+    }
+  }, [productToConfirm, isPaused, loadData]);
+
+  const handleProductSelection = (barcode) => {
+    const product = products.find((p) => p.barcode === barcode);
+    if (product) {
+      setProductToConfirm(product);
+    }
+  };
 
   useEffect(() => {
     loadData();
 
-    if (!isPaused) {
+    if (!isPaused && !productToConfirm) {
       const scanner = new Html5QrcodeScanner(
         'qr-reader',
         { fps: 10, qrbox: 250 },
@@ -107,7 +122,7 @@ export default function Kiosk() {
       );
 
       const onScanSuccess = (decodedText) => {
-        processConsumption(decodedText);
+        handleProductSelection(decodedText);
         scanner.clear();
       };
 
@@ -119,7 +134,7 @@ export default function Kiosk() {
         }
       };
     }
-  }, [loadData, processConsumption, isPaused]);
+  }, [loadData, isPaused, productToConfirm]);
 
   const handleManualSubmit = (event) => {
     event.preventDefault();
@@ -185,7 +200,7 @@ export default function Kiosk() {
             .map((product) => (
               <li
                 key={product.id}
-                onClick={() => processConsumption(product.barcode)}
+                onClick={() => handleProductSelection(product.barcode)}
               >
                 {product.name}
               </li>
@@ -196,6 +211,19 @@ export default function Kiosk() {
       <div className="consumptions-history">
         {/* ... (mesmo histórico) ... */}
       </div>
+
+      {productToConfirm && (
+        <div className="confirmation-modal">
+          <div className="modal-content">
+            <h2>Confirmar Consumo</h2>
+            <p>Você tem certeza que deseja consumir o produto: <strong>{productToConfirm.name}</strong>?</p>
+            <div className="modal-actions">
+              <button onClick={handleConfirmConsumption} className="confirm-button">Confirmar</button>
+              <button onClick={() => setProductToConfirm(null)} className="cancel-button">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

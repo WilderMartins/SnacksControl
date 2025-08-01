@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { format, parseISO } from 'date-fns';
 import api from '../../services/api';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
@@ -40,7 +41,7 @@ export default function Reports() {
         user_email: c.user.email,
         product_name: c.product.name,
         product_barcode: c.product.barcode,
-        date: new Date(c.created_at).toLocaleString(),
+        date: format(parseISO(c.created_at), 'Pp'),
       }));
       setCsvData(dataForCsv);
 
@@ -61,7 +62,7 @@ export default function Reports() {
     const doc = new jsPDF();
     doc.autoTable({
       head: [['Usuário', 'Produto', 'Data']],
-      body: consumptions.map(c => [c.user.name, c.product.name, new Date(c.created_at).toLocaleString()]),
+      body: consumptions.map(c => [c.user.name, c.product.name, format(parseISO(c.created_at), 'Pp')]),
     });
     doc.save('consumptions-report.pdf');
   };
@@ -125,7 +126,7 @@ export default function Reports() {
             <tr key={consumption.id}>
               <td>{consumption.user.name}</td>
               <td>{consumption.product.name}</td>
-              <td>{new Date(consumption.created_at).toLocaleString()}</td>
+              <td>{format(parseISO(consumption.created_at), 'Pp')}</td>
             </tr>
           ))}
         </tbody>

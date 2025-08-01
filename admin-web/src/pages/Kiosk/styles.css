@@ -128,3 +128,35 @@
 .product-selection-list li:hover {
   background-color: #f0f0f0;
 }
+
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-actions {
+  margin-top: 20px;
+}
+
+.modal-actions .confirm-button {
+  background-color: #4CAF50;
+  margin-right: 10px;
+}
+
+.modal-actions .cancel-button {
+  background-color: #f44336;
+}
