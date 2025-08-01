@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 import api from '../../services/api';
+import './styles.css';
 
 export default function Dashboard() {
   const [dailyConsumption, setDailyConsumption] = useState([]);

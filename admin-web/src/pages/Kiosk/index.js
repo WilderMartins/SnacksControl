@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import api from '../../services/api';
 import './styles.css';
 
 export default function Kiosk() {
+  const history = useHistory();
   const [settings, setSettings] = useState({});
   const [credits, setCredits] = useState(0);
   const [, setConsumptions] = useState([]); // Apenas o setter é usado para o histórico
@@ -118,6 +120,12 @@ export default function Kiosk() {
     setManualBarcode('');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    history.push('/');
+  };
+
   return (
     <div
       className="kiosk-container"
@@ -146,6 +154,10 @@ export default function Kiosk() {
           </div>
         )}
       </div>
+
+      <button onClick={handleLogout} className="logout-button">
+        Sair
+      </button>
 
       <div className="manual-input-container">
         {/* ... (mesmo formulário manual) ... */}
