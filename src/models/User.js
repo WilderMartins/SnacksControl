@@ -18,7 +18,7 @@ class User extends Model {
         sequelize,
         hooks: {
           beforeSave: async (user) => {
-            if (user.password) {
+            if (user.changed('password')) {
               user.password = await bcrypt.hash(user.password, 8);
             }
           },
