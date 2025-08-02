@@ -138,7 +138,7 @@ export default function Kiosk() {
 
   const handleManualSubmit = (event) => {
     event.preventDefault();
-    processConsumption(manualBarcode);
+    handleProductSelection(manualBarcode);
     setManualBarcode('');
   };
 

@@ -41,7 +41,7 @@ export default function Reports() {
         user_email: c.user.email,
         product_name: c.product.name,
         product_barcode: c.product.barcode,
-        date: format(parseISO(c.created_at), 'Pp'),
+        date: safeFormatDate(c.created_at),
       }));
       setCsvData(dataForCsv);
 
@@ -58,11 +58,20 @@ export default function Reports() {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
+  const safeFormatDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+      return format(parseISO(dateString), 'Pp');
+    } catch (error) {
+      return 'Data inválida';
+    }
+  };
+
   const handleExportPdf = () => {
     const doc = new jsPDF();
     doc.autoTable({
       head: [['Usuário', 'Produto', 'Data']],
-      body: consumptions.map(c => [c.user.name, c.product.name, format(parseISO(c.created_at), 'Pp')]),
+      body: consumptions.map(c => [c.user.name, c.product.name, safeFormatDate(c.created_at)]),
     });
     doc.save('consumptions-report.pdf');
   };
@@ -126,7 +135,7 @@ export default function Reports() {
             <tr key={consumption.id}>
               <td>{consumption.user.name}</td>
               <td>{consumption.product.name}</td>
-              <td>{format(parseISO(consumption.created_at), 'Pp')}</td>
+              <td>{safeFormatDate(consumption.created_at)}</td>
             </tr>
           ))}
         </tbody>
