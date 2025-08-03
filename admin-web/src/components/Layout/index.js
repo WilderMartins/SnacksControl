@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import api from '../../services/api';
 import { getUser, logout } from '../../services/auth';
+import Footer from '../Footer';
 import './styles.css';
 
 function Layout({ children, history }) {
@@ -86,7 +87,10 @@ function Layout({ children, history }) {
           </button>
         </div>
       </nav>
-      <main className="content">{children}</main>
+      <div className="main-content-wrapper">
+        <main className="content">{children}</main>
+        <Footer />
+      </div>
     </div>
   );
 }
