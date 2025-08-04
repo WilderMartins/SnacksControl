@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import api from '../../services/api';
+import './styles.css';
 
 export default function Dashboard() {
   const [dailyConsumption, setDailyConsumption] = useState([]);
@@ -54,56 +55,64 @@ export default function Dashboard() {
       <div className="charts-container">
         <div className="chart">
           <h2>Consumo Diário (Últimos 7 Dias)</h2>
-          <BarChart width={600} height={300} data={dailyConsumption}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="count" fill="#8884d8" />
-          </BarChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={dailyConsumption}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
         <div className="chart">
           <h2>Consumo por Categoria</h2>
-          <PieChart width={400} height={400}>
-            <Pie
-              data={categoryConsumption}
-              cx={200}
-              cy={200}
-              labelLine={false}
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {categoryConsumption.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={categoryConsumption}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {categoryConsumption.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
         <div className="chart">
           <h2>Top 5 Consumidores</h2>
-          <BarChart width={600} height={300} data={consumptionByUser}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#82ca9d" />
-          </BarChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={consumptionByUser}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
         <div className="chart">
           <h2>Top 5 Produtos</h2>
-          <BarChart width={600} height={300} data={topProducts}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#ffc658" />
-          </BarChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={topProducts}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#ffc658" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

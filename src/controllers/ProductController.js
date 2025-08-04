@@ -23,13 +23,13 @@ class ProductController {
   }
 
   async store(req, res) {
-    const { barcode, category_id } = req.body;
+    const { barcode, category_id, stock_quantity } = req.body;
 
     if (await Product.findOne({ where: { barcode } })) {
       return res.status(400).json({ error: 'Product already exists' });
     }
 
-    const product = await Product.create({ ...req.body, categoryId: category_id });
+    const product = await Product.create({ ...req.body, categoryId: category_id, stock_quantity });
 
     return res.status(201).json(product);
   }
@@ -56,7 +56,7 @@ class ProductController {
 
   async update(req, res) {
     const { id } = req.params;
-    const { name, barcode, category_id, image_url } = req.body;
+    const { name, barcode, category_id, image_url, stock_quantity } = req.body;
 
     const product = await Product.findByPk(id);
 
@@ -64,7 +64,7 @@ class ProductController {
       return res.status(400).json({ error: 'Product not found' });
     }
 
-    await product.update({ name, barcode, categoryId: category_id, image_url });
+    await product.update({ name, barcode, categoryId: category_id, image_url, stock_quantity });
 
     return res.json(product);
   }
