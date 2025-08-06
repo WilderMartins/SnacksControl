@@ -1,5 +1,6 @@
 .login-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -14,10 +15,19 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-container h2 {
+.login-header {
   text-align: center;
   margin-bottom: 20px;
+}
+
+.login-header h1 {
+  font-size: 2.5rem;
   color: #333;
+}
+
+.login-header h2 {
+  font-size: 1.5rem;
+  color: #555;
 }
 
 .login-container input {
@@ -44,41 +54,6 @@
   background-color: #555;
 }
 
-.otp-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.otp-group input {
-  flex: 1;
-  margin-bottom: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.otp-group button {
-  padding: 10px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  width: auto;
-  font-size: 14px;
-}
-
-.login-toggle {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.login-toggle a {
-  color: #333;
-  text-decoration: none;
-}
-
-.login-toggle a:hover {
-  text-decoration: underline;
-}
-
 .feedback {
   padding: 10px;
   margin-bottom: 15px;
@@ -94,14 +69,4 @@
 .feedback.error {
   background-color: #f8d7da;
   color: #721c24;
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.login-logo {
-  max-width: 150px;
-  margin-bottom: 10px;
 }

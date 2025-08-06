@@ -1,9 +1,10 @@
 'use strict';
+const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('products', 'price', {
-      type: Sequelize.DECIMAL(10, 2),
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
     });
   },

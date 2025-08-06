@@ -35,8 +35,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   border-bottom: 1px solid #ddd;
+  gap: 15px;
 }
 
 .product-actions button {
@@ -67,4 +68,9 @@
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
+}
+
+.out-of-stock {
+  color: #f44336;
+  font-weight: bold;
 }

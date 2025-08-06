@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { login } from '../../services/auth';
 import './styles.css';
 
 export default function Login({ history }) {
+  const [settings, setSettings] = useState({});
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
   const [loginMethod, setLoginMethod] = useState('password'); // 'password' or 'otp'
   const [feedback, setFeedback] = useState({ message: '', type: '' });
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const response = await api.get('/settings');
+        setSettings(response.data);
+        if (response.data.login_method !== 'both') {
+          setLoginMethod(response.data.login_method);
+        }
+      } catch (err) {
+        console.error('Failed to load settings', err);
+      }
+    }
+    loadSettings();
+  }, []);
 
   async function handleLogin(event) {
     event.preventDefault();
@@ -17,8 +33,12 @@ export default function Login({ history }) {
       const payload = loginMethod === 'password' ? { email, password } : { email, otp };
       const response = await api.post('/sessions', payload);
       const { token, user } = response.data;
+      if (user.role === 'admin') {
+        setFeedback({ message: 'Acesse a página /admin para fazer login como administrador.', type: 'error' });
+        return;
+      }
       login(token, user);
-      history.push(user.role === 'admin' ? '/dashboard' : '/kiosk');
+      history.push('/kiosk');
     } catch (error) {
       setFeedback({ message: 'Falha no login, verifique suas credenciais.', type: 'error' });
     }
@@ -37,6 +57,12 @@ export default function Login({ history }) {
 
   return (
     <div className="login-container">
+      <div className="login-header">
+        {settings.logo_path && (
+          <img src={settings.logo_path} alt="Logo" className="login-logo" />
+        )}
+        <h1>EXA Snacks</h1>
+      </div>
       <form onSubmit={handleLogin}>
         <h2>Acesse o quiosque</h2>
 
@@ -74,17 +100,19 @@ export default function Login({ history }) {
           </div>
         )}
         <button type="submit">Entrar</button>
-        <div className="login-toggle">
-          {loginMethod === 'password' ? (
-            <a href="#" onClick={() => setLoginMethod('otp')}>
-              Entrar com código OTP
-            </a>
-          ) : (
-            <a href="#" onClick={() => setLoginMethod('password')}>
-              Entrar com senha
-            </a>
-          )}
-        </div>
+        {settings.login_method === 'both' && (
+          <div className="login-toggle">
+            {loginMethod === 'password' ? (
+              <a href="#" onClick={() => setLoginMethod('otp')}>
+                Entrar com código OTP
+              </a>
+            ) : (
+              <a href="#" onClick={() => setLoginMethod('password')}>
+                Entrar com senha
+              </a>
+            )}
+          </div>
+        )}
       </form>
     </div>
   );

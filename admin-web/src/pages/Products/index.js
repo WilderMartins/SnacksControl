@@ -11,6 +11,7 @@ export default function Products() {
     barcode: '',
     category_id: '',
     image_url: '',
+    stock_quantity: 0,
   });
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -160,6 +161,13 @@ export default function Products() {
             onChange={handleInputChange}
             placeholder="URL da Imagem"
           />
+          <input
+            name="stock_quantity"
+            type="number"
+            value={newProduct.stock_quantity}
+            onChange={handleInputChange}
+            placeholder="Quantidade em Estoque"
+          />
           <button type="submit">Criar</button>
         </form>
       </div>
@@ -180,6 +188,7 @@ export default function Products() {
               <th>Nome</th>
               <th>Código de Barras</th>
               <th>Categoria</th>
+              <th>Estoque</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -192,6 +201,13 @@ export default function Products() {
                 <td>{product.name}</td>
                 <td>{product.barcode}</td>
                 <td>{product.category ? product.category.name : ''}</td>
+                <td>
+                  {product.stock_quantity > 0 ? (
+                    product.stock_quantity
+                  ) : (
+                    <span className="out-of-stock">Fora de estoque</span>
+                  )}
+                </td>
                 <td>
                   <div className="product-actions">
                     <button onClick={() => handleEdit(product)}>Editar</button>
@@ -254,6 +270,18 @@ export default function Products() {
                 })
               }
               placeholder="URL da Imagem"
+            />
+            <input
+              name="stock_quantity"
+              type="number"
+              value={editingProduct.stock_quantity}
+              onChange={(e) =>
+                setEditingProduct({
+                  ...editingProduct,
+                  stock_quantity: e.target.value,
+                })
+              }
+              placeholder="Quantidade em Estoque"
             />
             <button type="submit">Salvar</button>
             <button onClick={() => setEditingProduct(null)}>Cancelar</button>
