@@ -1,5 +1,19 @@
 const { Umzug, SequelizeStorage } = require('umzug');
 const sequelize = require('../database/index').connection;
+const Sequelize = require('sequelize');
+
+const umzug = new Umzug({
+  migrations: {
+    glob: 'src/database/migrations/*.js',
+    resolve: ({ name, path, context }) => {
+      const migration = require(path);
+      return {
+        name,
+        up: async () => migration.up(context, Sequelize),
+        down: async () => migration.down(context, Sequelize),
+      };
+    },
+  },
 
 const umzug = new Umzug({
   migrations: { glob: 'src/database/migrations/*.js' },
