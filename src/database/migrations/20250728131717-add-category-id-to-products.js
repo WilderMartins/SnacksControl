@@ -1,4 +1,5 @@
 'use strict';
+const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -8,7 +9,7 @@ module.exports = {
           'products',
           'category_id',
           {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             references: { model: 'categories', key: 'id' },
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL',
@@ -30,7 +31,7 @@ module.exports = {
           'products',
           'category',
           {
-            type: Sequelize.STRING,
+            type: DataTypes.STRING,
             allowNull: true,
           },
           { transaction: t }

@@ -14,6 +14,9 @@ const umzug = new Umzug({
       };
     },
   },
+
+const umzug = new Umzug({
+  migrations: { glob: 'src/database/migrations/*.js' },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
   logger: console,
