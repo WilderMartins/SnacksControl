@@ -5,6 +5,7 @@ const adminMiddleware = require('../middlewares/admin');
 const usersRouter = Router();
 
 usersRouter.get('/', adminMiddleware, UserController.index);
+usersRouter.get('/:id', UserController.show);
 usersRouter.post('/', adminMiddleware, UserController.store);
 usersRouter.put('/:id', adminMiddleware, UserController.update);
 usersRouter.delete('/:id', adminMiddleware, UserController.delete);

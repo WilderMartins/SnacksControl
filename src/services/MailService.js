@@ -1,6 +1,7 @@
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 const fs = require('fs').promises;
 const path = require('path');
+const https = require('https');
 
 const settingsFilePath = path.resolve(__dirname, '..', 'config', 'settings.json');
 
@@ -15,15 +16,23 @@ class MailService {
   async initialize() {
     try {
       const settings = await fs.readFile(settingsFilePath, 'utf-8');
-      const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from } = JSON.parse(settings);
+      const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from, ses_ignore_tls } = JSON.parse(settings);
 
-      this.sesClient = new SESClient({
+      const clientConfig = {
         region: aws_region,
         credentials: {
           accessKeyId: aws_access_key_id,
           secretAccessKey: aws_secret_access_key,
         },
-      });
+      };
+
+      if (ses_ignore_tls) {
+        clientConfig.tlsAgent = new https.Agent({
+          rejectUnauthorized: false,
+        });
+      }
+
+      this.sesClient = new SESClient(clientConfig);
       this.mailFrom = mail_from;
       this._isInitialized = true;
     } catch (error) {

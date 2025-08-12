@@ -5,45 +5,66 @@ const Product = require('../models/Product');
 const Consumption = require('../models/Consumption');
 const Category = require('../models/Category');
 
+const sequelize = require('../database/index').connection;
+
 class ConsumptionController {
   // ... (método store permanece o mesmo)
   async store(req, res) {
-    const { barcode } = req.body;
-    const userId = req.userId;
+    const t = await sequelize.transaction();
 
-    const product = await Product.findOne({ where: { barcode } });
+    try {
+      const { barcode } = req.body;
+      const userId = req.userId;
 
-    if (!product) {
-      return res.status(400).json({ error: 'Product not found' });
-    }
+      const product = await Product.findOne({ where: { barcode }, transaction: t });
 
-    const user = await User.findByPk(userId);
+      if (!product) {
+        await t.rollback();
+        return res.status(400).json({ error: 'Product not found' });
+      }
 
-    const today = new Date();
-    const startOfToday = startOfDay(today);
-    const endOfToday = endOfDay(today);
+      if (product.stock_quantity <= 0) {
+        await t.rollback();
+        return res.status(400).json({ error: 'Product out of stock' });
+      }
 
-    const dailyConsumptions = await Consumption.count({
-      where: {
-        user_id: userId,
-        created_at: {
-          [Op.between]: [startOfToday, endOfToday],
+      const user = await User.findByPk(userId, { transaction: t });
+
+      const today = new Date();
+      const startOfToday = startOfDay(today);
+      const endOfToday = endOfDay(today);
+
+      const dailyConsumptions = await Consumption.count({
+        where: {
+          user_id: userId,
+          created_at: {
+            [Op.between]: [startOfToday, endOfToday],
+          },
         },
-      },
-    });
+        transaction: t,
+      });
 
-    if (dailyConsumptions >= user.daily_credits) {
-      return res.status(403).json({ error: 'Daily credit limit reached' });
+      if (dailyConsumptions >= user.daily_credits) {
+        await t.rollback();
+        return res.status(403).json({ error: 'Daily credit limit reached' });
+      }
+
+      const consumption = await Consumption.create({
+        user_id: userId,
+        product_id: product.id,
+      }, { transaction: t });
+
+      await product.decrement('stock_quantity', { by: 1, transaction: t });
+
+      await t.commit();
+
+      const consumptionWithProduct = await Consumption.findByPk(consumption.id, { include: { model: Product, as: 'product' } });
+
+      return res.status(201).json(consumptionWithProduct);
+    } catch (error) {
+      await t.rollback();
+      return res.status(500).json({ error: 'Failed to process consumption.' });
     }
-
-    const consumption = await Consumption.create({
-      user_id: userId,
-      product_id: product.id,
-    });
-
-    const consumptionWithProduct = await Consumption.findByPk(consumption.id, { include: { model: Product, as: 'product' } });
-
-    return res.status(201).json(consumptionWithProduct);
   }
 
   // ... (método index permanece o mesmo)
