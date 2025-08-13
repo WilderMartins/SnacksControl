@@ -1,5 +1,6 @@
 const { Umzug, SequelizeStorage } = require('umzug');
 const sequelize = require('../database/index').connection;
+
 const Sequelize = require('sequelize');
 
 const umzug = new Umzug({
@@ -14,6 +15,7 @@ const umzug = new Umzug({
       };
     },
   },
+
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
   logger: console,
@@ -21,6 +23,7 @@ const umzug = new Umzug({
 
 (async () => {
   try {
+
     await umzug.up();
     console.log('Migrations run successfully.');
   } catch (error) {
