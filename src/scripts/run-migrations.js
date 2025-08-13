@@ -21,7 +21,6 @@ const umzug = new Umzug({
   logger: console,
 });
 
-
 (async () => {
   try {
 
