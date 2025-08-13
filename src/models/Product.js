@@ -8,6 +8,10 @@ class Product extends Model {
         barcode: DataTypes.STRING,
         image_url: DataTypes.STRING,
         price: DataTypes.DECIMAL,
+        stock_quantity: {
+          type: DataTypes.INTEGER,
+          defaultValue: 0,
+        },
       },
       {
         sequelize,
