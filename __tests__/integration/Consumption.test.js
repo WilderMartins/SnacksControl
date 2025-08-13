@@ -32,6 +32,7 @@ describe('Consumption Controller', () => {
       name: 'Test Product',
       barcode: '123456789',
       price: 1.99,
+      stock_quantity: 10,
     });
 
     const response = await request(app)
