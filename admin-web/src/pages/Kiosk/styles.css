@@ -99,7 +99,7 @@
   border-bottom: 1px solid #eee;
 }
 
-.logout-button {
+.kiosk-container .logout-button {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #f44336;

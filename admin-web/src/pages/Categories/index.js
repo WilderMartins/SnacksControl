@@ -114,8 +114,10 @@ export default function Categories() {
               }
               placeholder="Nome da Categoria"
             />
-            <button type="submit">Salvar</button>
-            <button onClick={() => setEditingCategory(null)}>Cancelar</button>
+            <div className="modal-buttons">
+              <button type="submit">Salvar</button>
+              <button onClick={() => setEditingCategory(null)} className="cancel-button">Cancelar</button>
+            </div>
           </form>
         </div>
       )}

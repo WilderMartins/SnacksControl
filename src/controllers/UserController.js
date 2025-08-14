@@ -70,6 +70,24 @@ class UserController {
 
     return res.status(204).send();
   }
+
+  async toggleOtp(req, res) {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (user.role === 'admin') {
+      return res.status(403).json({ error: 'Cannot change OTP status for admin users.' });
+    }
+
+    user.otp_enabled = !user.otp_enabled;
+    await user.save();
+
+    return res.json(user);
+  }
 }
 
 module.exports = new UserController();

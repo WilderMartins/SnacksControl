@@ -1,0 +1,51 @@
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* Space between main sections */
+}
+
+.settings-form,
+.credits-form {
+  padding: 25px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form elements */
+}
+
+.ses-test-container {
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.settings-form h2,
+.credits-form h2 {
+  margin-top: 0;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ses-test-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ses-test-container input {
+    margin-bottom: 0;
+}
+
+.ses-test-container h3 {
+    margin: 0;
+}
+
+/* Make color pickers not take full width */
+input[type="color"] {
+  width: 100px;
+  height: 40px;
+  padding: 5px;
+}

@@ -6,44 +6,45 @@ const MailService = require('../services/MailService');
 
 class SessionController {
   async store(req, res) {
-    console.log('-> Entrou em SessionController.store');
     const { email, password, otp } = req.body;
-    console.log('Dados de login recebidos:', { email, password: password ? '***' : undefined, otp });
-
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    // Password-based login
-    if (password) {
-      if (!(await user.checkPassword(password))) {
-        console.log('Comparação de senha falhou.');
-        return res.status(401).json({ error: 'Invalid password' });
+    // Admin login can use either password or OTP
+    if (user.role === 'admin') {
+      if (password) {
+        if (!(await user.checkPassword(password))) {
+          return res.status(401).json({ error: 'Invalid password for admin' });
+        }
+      } else if (otp) {
+        if (user.otp !== otp || new Date() > user.otp_expires_at) {
+          return res.status(401).json({ error: 'Invalid or expired OTP for admin' });
+        }
+        await user.update({ otp: null, otp_expires_at: null });
+      } else {
+        return res.status(400).json({ error: 'Admin must provide password or OTP' });
       }
-    }
-    // OTP-based login
-    else if (otp) {
-      if (user.otp !== otp || new Date() > user.otp_expires_at) {
-        return res.status(401).json({ error: 'Invalid OTP' });
+    } else {
+      // Regular user login flow is enforced by the flag
+      if (user.otp_enabled) {
+        if (!otp || user.otp !== otp || new Date() > user.otp_expires_at) {
+          return res.status(401).json({ error: 'Invalid or expired OTP' });
+        }
+        await user.update({ otp: null, otp_expires_at: null });
+      } else {
+        if (!password || !(await user.checkPassword(password))) {
+          return res.status(401).json({ error: 'Invalid password' });
+        }
       }
-      await user.update({ otp: null, otp_expires_at: null });
-    }
-    // No credentials provided
-    else {
-      return res.status(400).json({ error: 'Provide password or OTP' });
     }
 
+    // If we get here, authentication was successful.
     const { id, name, role } = user;
-
     return res.json({
-      user: {
-        id,
-        name,
-        email,
-        role,
-      },
+      user: { id, name, email, role },
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,
       }),

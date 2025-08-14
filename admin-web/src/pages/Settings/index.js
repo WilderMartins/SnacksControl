@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
+import './styles.css';
 
 export default function Settings() {
   const [awsAccessKeyId, setAwsAccessKeyId] = useState('');
@@ -108,9 +109,9 @@ export default function Settings() {
   }
 
   return (
-    <div className="container">
+    <div className="settings-container">
       <h1>Configurações</h1>
-      <form onSubmit={handleSettingsSubmit}>
+      <form onSubmit={handleSettingsSubmit} className="settings-form">
         <h2>E-mail (AWS SES)</h2>
         <input
           placeholder="AWS Access Key ID"
@@ -144,6 +145,7 @@ export default function Settings() {
           value={sesPort}
           onChange={(e) => setSesPort(e.target.value)}
         />
+
         <h2>Aparência</h2>
         <label htmlFor="logo">Logo da Empresa:</label>
         <input
@@ -178,9 +180,7 @@ export default function Settings() {
         <button onClick={handleSesTest}>Enviar E-mail de Teste</button>
       </div>
 
-      <hr />
-
-      <form onSubmit={handleCreditsSubmit}>
+      <form onSubmit={handleCreditsSubmit} className="credits-form">
         <h2>Créditos Globais</h2>
         <p>
           Altere o valor abaixo para definir um novo padrão de créditos diários para todos os usuários.
