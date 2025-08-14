@@ -17,6 +17,8 @@ class User extends Model {
           type: DataTypes.BOOLEAN,
           defaultValue: false,
         },
+        password_reset_token: DataTypes.STRING,
+        password_reset_expires: DataTypes.DATE,
       },
       {
         sequelize,

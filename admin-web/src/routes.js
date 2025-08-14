@@ -13,6 +13,8 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Categories from './pages/Categories';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -34,6 +36,8 @@ const Routes = () => (
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/admin" component={AdminLogin} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
       <PrivateRoute path="/dashboard" component={Dashboard} />
       <PrivateRoute path="/users" component={Users} />
       <PrivateRoute path="/products" component={Products} />

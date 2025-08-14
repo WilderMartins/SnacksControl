@@ -34,6 +34,8 @@ class App {
     // Session routes
     this.server.post('/api/sessions', SessionController.store);
     this.server.post('/api/sessions/otp', SessionController.sendOtp);
+    this.server.post('/api/sessions/forgot-password', SessionController.forgotPassword);
+    this.server.post('/api/sessions/reset-password', SessionController.resetPassword);
 
     // Private routes
     const privateRoutes = require('./routes/private.routes');
