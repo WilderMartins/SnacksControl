@@ -125,58 +125,60 @@ export default function Products() {
   };
 
   return (
-    <div className="container">
+    <div className="products-page-container">
       <h1>Gestão de Produtos</h1>
 
-      <div className="manual-creation-container">
-        <h2>Criar Novo Produto</h2>
-        <form onSubmit={handleManualSubmit}>
-          <input
-            name="name"
-            value={newProduct.name}
-            onChange={handleInputChange}
-            placeholder="Nome do Produto"
-          />
-          <input
-            name="barcode"
-            value={newProduct.barcode}
-            onChange={handleInputChange}
-            placeholder="Código de Barras"
-          />
-          <select
-            name="category_id"
-            value={newProduct.category_id}
-            onChange={handleInputChange}
-          >
-            <option value="">Selecione uma categoria</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          <input
-            name="image_url"
-            value={newProduct.image_url}
-            onChange={handleInputChange}
-            placeholder="URL da Imagem"
-          />
-          <input
-            name="stock_quantity"
-            type="number"
-            value={newProduct.stock_quantity}
-            onChange={handleInputChange}
-            placeholder="Quantidade em Estoque"
-          />
-          <button type="submit">Criar</button>
-        </form>
-      </div>
+      <div className="forms-wrapper">
+        <div className="manual-creation-container">
+          <h2>Criar Novo Produto</h2>
+          <form onSubmit={handleManualSubmit}>
+            <input
+              name="name"
+              value={newProduct.name}
+              onChange={handleInputChange}
+              placeholder="Nome do Produto"
+            />
+            <input
+              name="barcode"
+              value={newProduct.barcode}
+              onChange={handleInputChange}
+              placeholder="Código de Barras"
+            />
+            <select
+              name="category_id"
+              value={newProduct.category_id}
+              onChange={handleInputChange}
+            >
+              <option value="">Selecione uma categoria</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <input
+              name="image_url"
+              value={newProduct.image_url}
+              onChange={handleInputChange}
+              placeholder="URL da Imagem"
+            />
+            <input
+              name="stock_quantity"
+              type="number"
+              value={newProduct.stock_quantity}
+              onChange={handleInputChange}
+              placeholder="Quantidade em Estoque"
+            />
+            <button type="submit">Criar</button>
+          </form>
+        </div>
 
-      <div className="upload-container">
-        <h2>Importar Produtos via CSV</h2>
-        <p>O arquivo CSV deve ter as colunas: `name`, `barcode`, `category`, `image_url`.</p>
-        <input type="file" onChange={handleFileChange} accept=".csv" />
-        <button onClick={handleUpload}>Enviar</button>
+        <div className="upload-container">
+          <h2>Importar Produtos via CSV</h2>
+          <p>O arquivo CSV deve ter as colunas: `name`, `barcode`, `category`, `image_url`.</p>
+          <input type="file" onChange={handleFileChange} accept=".csv" />
+          <button onClick={handleUpload}>Enviar</button>
+        </div>
       </div>
 
       <div className="products-list">
@@ -283,8 +285,10 @@ export default function Products() {
               }
               placeholder="Quantidade em Estoque"
             />
-            <button type="submit">Salvar</button>
-            <button onClick={() => setEditingProduct(null)}>Cancelar</button>
+            <div className="modal-buttons">
+              <button type="submit">Salvar</button>
+              <button onClick={() => setEditingProduct(null)}>Cancelar</button>
+            </div>
           </form>
         </div>
       )}

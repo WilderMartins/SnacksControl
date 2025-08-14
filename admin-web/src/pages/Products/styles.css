@@ -1,76 +1,131 @@
-.products-container {
+/* Main container for the page */
+.products-page-container {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  gap: 30px; /* Add space between sections */
 }
 
+/* A wrapper for the top two forms */
+.forms-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 30px;
+  align-items: start;
+}
+
+/* Styling for the form containers */
 .manual-creation-container,
 .upload-container {
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
 }
 
+.manual-creation-container h2,
+.upload-container h2,
+.products-list h2 {
+  margin-top: 0;
+}
+
+/* Add spacing to form elements */
 .manual-creation-container form {
   display: flex;
   flex-direction: column;
-}
-
-.manual-creation-container input {
-  width: calc(100% - 22px);
-}
-
-.products-list {
-  width: 100%;
-  max-width: 600px;
-}
-
-.products-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.products-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
   gap: 15px;
 }
 
-.product-actions button {
-  margin-left: 10px;
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Table styling */
+.products-list {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  padding: 20px;
+}
+
+.products-table {
+  width: 100%;
+  border-collapse: collapse; /* Clean look for borders */
+}
+
+.products-table th,
+.products-table td {
+  padding: 12px 15px; /* Add padding to cells */
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.products-table th {
+  font-weight: 600;
+}
+
+.products-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .product-thumbnail {
   width: 50px;
   height: 50px;
   object-fit: cover;
+  border-radius: 4px;
 }
 
+/* Use flex and gap for action buttons */
+.product-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.out-of-stock {
+  color: #f44336;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Modal styles (similar to Categories) */
 .edit-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .edit-modal form {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px; /* Wider for more fields */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.out-of-stock {
-  color: #f44336;
-  font-weight: bold;
+.edit-modal .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .forms-wrapper {
+    grid-template-columns: 1fr; /* Stack forms on smaller screens */
+  }
 }

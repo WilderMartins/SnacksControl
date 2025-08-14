@@ -1,71 +1,124 @@
-.users-container {
+/* A container for the whole page */
+.users-page-container {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  gap: 30px;
 }
 
 .user-creation-container {
   width: 100%;
   max-width: 600px;
-  margin-bottom: 20px;
+  padding: 25px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.user-creation-container h2 {
+  margin-top: 0;
 }
 
 .user-creation-container form {
   display: flex;
   flex-direction: column;
-}
-
-.user-creation-container input,
-.user-creation-container select {
-  width: calc(100% - 22px);
-}
-
-.users-list {
-  width: 100%;
-  max-width: 600px;
-}
-
-.users-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.users-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
   gap: 15px;
 }
 
-.user-actions button {
-  margin-left: 10px;
+/* Table styling */
+.users-table-container {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  padding: 20px;
 }
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.users-table th {
+  font-weight: 600;
+}
+
+.users-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* OTP Toggle Button Styles */
+.otp-toggle-button {
+  padding: 5px 10px;
+  font-size: 0.85em;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  min-width: 90px;
+  text-align: center;
+}
+
+.otp-toggle-button.enabled {
+  background-color: #e8f5e9; /* Light green */
+  color: #2e7d32;
+  border-color: #a5d6a7;
+}
+
+.otp-toggle-button.disabled {
+  background-color: #fce4ec; /* Light red/pink */
+  color: #c2185b;
+  border-color: #f8bbd0;
+}
+
+.otp-toggle-button:disabled {
+  background-color: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #ddd;
+}
+
+/* Modal styles */
 .edit-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .edit-modal form {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-.edit-modal form input,
-.edit-modal form select {
-  margin-bottom: 10px;
+.edit-modal .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
 }

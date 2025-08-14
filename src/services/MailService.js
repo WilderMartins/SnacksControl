@@ -76,6 +76,46 @@ class MailService {
     const command = new SendEmailCommand(params);
     return this.sesClient.send(command);
   }
+
+  async sendPasswordResetEmail(to, token) {
+    await this.ensureInitialized();
+    if (!this._isInitialized) {
+      throw new Error('Mail service not initialized.');
+    }
+
+    const resetUrl = `${process.env.APP_URL}/reset-password?token=${token}`;
+
+    const params = {
+      Destination: {
+        ToAddresses: [to],
+      },
+      Message: {
+        Body: {
+          Html: {
+            Charset: 'UTF-8',
+            Data: `
+              <p>Você solicitou a redefinição de senha para sua conta de administrador.</p>
+              <p>Clique no link abaixo para criar uma nova senha:</p>
+              <p><a href="${resetUrl}">${resetUrl}</a></p>
+              <p>Se você não solicitou isso, por favor, ignore este e-mail.</p>
+            `,
+          },
+          Text: {
+            Charset: 'UTF-8',
+            Data: `Você solicitou a redefinição de senha. Acesse o seguinte link para criar uma nova senha: ${resetUrl}`,
+          },
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: 'Redefinição de Senha de Administrador',
+        },
+      },
+      Source: this.mailFrom,
+    };
+
+    const command = new SendEmailCommand(params);
+    return this.sesClient.send(command);
+  }
 }
 
 module.exports = new MailService();

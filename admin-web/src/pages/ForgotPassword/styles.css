@@ -1,36 +1,32 @@
-.login-container {
+.forgot-password-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #f4f4f4;
 }
 
-.login-container form {
-  width: 350px;
+.forgot-password-form {
+  width: 400px;
   padding: 40px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.login-header {
   text-align: center;
+}
+
+.forgot-password-form h1 {
+  margin-bottom: 10px;
+}
+
+.forgot-password-form p {
   margin-bottom: 20px;
+  color: #666;
+  font-size: 0.95em;
+  line-height: 1.5;
 }
 
-.login-header h1 {
-  font-size: 2.5rem;
-  color: #333;
-}
-
-.login-header h2 {
-  font-size: 1.5rem;
-  color: #555;
-}
-
-.login-container input {
+.forgot-password-form input {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -39,7 +35,7 @@
   box-sizing: border-box;
 }
 
-.login-container button {
+.forgot-password-form button {
   width: 100%;
   padding: 12px;
   background-color: #333;
@@ -50,10 +46,7 @@
   font-size: 16px;
 }
 
-.login-container button:hover {
-  background-color: #555;
-}
-
+/* Feedback message styles */
 .feedback {
   padding: 10px;
   margin-bottom: 15px;
@@ -71,15 +64,7 @@
   color: #721c24;
 }
 
-.forgot-password-link {
-  display: block;
-  text-align: center;
-  margin-top: 15px;
-  color: #555;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.forgot-password-link:hover {
-  text-decoration: underline;
+.feedback.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
 }
