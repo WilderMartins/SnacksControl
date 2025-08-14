@@ -78,3 +78,19 @@
     padding: 10px;
   }
 }
+
+.logout-button {
+  margin-top: auto; /* Pushes the button to the bottom */
+}
+
+.logout-button button {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: inherit;
+  text-align: left;
+}
+
+.logout-button button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

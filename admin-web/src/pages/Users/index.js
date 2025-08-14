@@ -60,6 +60,19 @@ export default function Users() {
     }
   };
 
+  const handleToggleOtp = async (userId) => {
+    const token = localStorage.getItem('token');
+    try {
+      await api.put(`/users/${userId}/toggle-otp`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert('Status do OTP alterado com sucesso!');
+      loadUsers();
+    } catch (error) {
+      alert('Falha ao alterar o status do OTP.');
+    }
+  };
+
   const handleEdit = (user) => {
     setEditingUser(user);
   };
@@ -91,7 +104,7 @@ export default function Users() {
   };
 
   return (
-    <div className="container">
+    <div className="users-page-container">
       <h1>Colaboradores</h1>
 
       <div className="user-creation-container">
@@ -133,21 +146,32 @@ export default function Users() {
         </form>
       </div>
 
-      <table className="users-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Créditos</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
+      <div className="users-table-container">
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Créditos</th>
+              <th>Login com OTP</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
               <td>{user.daily_credits}</td>
+              <td>
+                <button
+                  onClick={() => handleToggleOtp(user.id)}
+                  disabled={user.role === 'admin'}
+                  className={`otp-toggle-button ${user.otp_enabled ? 'enabled' : 'disabled'}`}
+                >
+                  {user.otp_enabled ? 'Ativado' : 'Desativado'}
+                </button>
+              </td>
               <td>
                 <div className="user-actions">
                   <button onClick={() => handleEdit(user)}>Editar</button>
@@ -157,7 +181,8 @@ export default function Users() {
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
 
       {editingUser && (
         <div className="edit-modal">
@@ -208,8 +233,10 @@ export default function Users() {
               }
               placeholder="Nova Senha"
             />
-            <button type="submit">Salvar</button>
-            <button onClick={() => setEditingUser(null)}>Cancelar</button>
+            <div className="modal-buttons">
+              <button type="submit">Salvar</button>
+              <button onClick={() => setEditingUser(null)}>Cancelar</button>
+            </div>
           </form>
         </div>
       )}

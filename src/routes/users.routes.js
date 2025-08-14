@@ -12,5 +12,6 @@ usersRouter.delete('/:id', adminMiddleware, UserController.delete);
 
 usersRouter.patch('/:id/credits', adminMiddleware, UserController.updateCredits);
 usersRouter.post('/credits/reset', adminMiddleware, UserController.resetAllCredits);
+usersRouter.put('/:id/toggle-otp', adminMiddleware, UserController.toggleOtp);
 
 module.exports = usersRouter;

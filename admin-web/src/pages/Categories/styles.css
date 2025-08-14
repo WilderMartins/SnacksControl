@@ -1,45 +1,57 @@
 .categories-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 20px;
 }
 
 .category-creation-container {
   width: 100%;
   max-width: 600px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.category-creation-container h2 {
+  margin-top: 0;
 }
 
 .category-creation-container form {
   display: flex;
   flex-direction: column;
-}
-
-.category-creation-container input {
-  width: calc(100% - 22px);
+  gap: 15px;
 }
 
 .categories-list {
   width: 100%;
   max-width: 600px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #eee;
 }
 
 .categories-list ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .categories-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.category-actions button {
-  margin-left: 10px;
+.categories-list li:last-child {
+  border-bottom: none;
+}
+
+.category-actions {
+  display: flex;
+  gap: 10px;
 }
 
 .edit-modal {
@@ -48,16 +60,31 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .edit-modal form {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-modal h2 {
+  margin-top: 0;
+}
+
+.edit-modal .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
 }
