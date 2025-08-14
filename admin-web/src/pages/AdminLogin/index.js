@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { login } from '../../services/auth';
 import './styles.css';
@@ -52,6 +53,9 @@ export default function AdminLogin({ history }) {
           required
         />
         <button type="submit">Entrar</button>
+        <Link to="/forgot-password" className="forgot-password-link">
+          Esqueceu sua senha?
+        </Link>
       </form>
     </div>
   );

@@ -129,10 +129,15 @@ class ConsumptionController {
   }
 
   async summary(req, res) {
+    const dialect = sequelize.getDialect();
+    const dateTrunc = dialect === 'postgres'
+      ? fn('date_trunc', 'day', col('created_at'))
+      : fn('strftime', '%Y-%m-%d 00:00:00', col('created_at'));
+
     // Daily consumption for the last 7 days
     const dailyConsumptions = await Consumption.findAll({
       attributes: [
-        [fn('date_trunc', 'day', col('created_at')), 'date'],
+        [dateTrunc, 'date'],
         [fn('COUNT', 'id'), 'count'],
       ],
       where: {

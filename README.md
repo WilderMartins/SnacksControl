@@ -4,78 +4,64 @@ Este é um sistema completo para gerenciar o consumo de snacks e bebidas por col
 
 ## Funcionalidades
 
-- **Autenticação Segura**: Login com senha ou sem senha utilizando OTP (One-Time Password) enviado por e-mail.
+- **Autenticação Segura**:
+  - Login com senha para administradores.
+  - Login com senha ou OTP (One-Time Password) para usuários, configurável por usuário.
+  - Fluxo de "Esqueci minha senha" para administradores.
 - **Painel de Administração Web**:
-    - Gestão de usuários (colaboradores), com opção de criação, edição e exclusão manual.
-    - Gestão de produtos (snacks, bebidas, etc.), com opção de criação, edição e exclusão manual e importação via CSV.
+    - Gestão de usuários (colaboradores), com criação, edição, exclusão e **habilitação de OTP por usuário**.
+    - Gestão de produtos, com criação, edição, exclusão e importação via CSV.
     - Gestão de categorias de produtos.
-    - Configuração de layout (cor da barra lateral) e serviços externos (AWS SES para envio de e-mails).
-    - Dashboard com gráficos de consumo diário e por categoria.
-    - Relatórios de consumo detalhados com opção de exportação para CSV.
+    - Configuração de layout (cores, logo) e serviços de e-mail (AWS SES).
+    - Dashboard com gráficos de consumo.
+    - Relatórios de consumo detalhados.
 - **RBAC (Controle de Acesso Baseado em Função)**:
-    - Criação de usuários com as funções de `Admin`, `Manager` e `User`.
+    - Suporte para as funções de `Admin`, `Manager` e `User`.
 - **Interface de Quiosque**:
-    - Otimizada para tablets e uso de baixa fricção e responsiva para dispositivos móveis.
+    - Otimizada para tablets e responsiva para dispositivos móveis.
     - Escaneamento de código de barras de produtos usando a câmera do dispositivo.
-    - Registro de consumo automático com feedback visual instantâneo e tratamento de erros amigável.
-    - Exibição em tempo real do saldo de créditos diários e do histórico de consumo.
+    - Registro de consumo com feedback visual e controle de limite de créditos.
 - **Backend Robusto**:
     - API RESTful segura para comunicação entre o frontend e o banco de dados.
-    - Lógica de negócio para controle de limite de consumo diário.
 
 ## Tecnologias Utilizadas
 
-- **Backend**: Node.js, Express, Sequelize, PostgreSQL
-- **Frontend**: React, Material-UI (conceitualmente), CSS puro
-- **Banco de Dados**: PostgreSQL (com suporte para Docker)
+- **Backend**: Node.js, Express, Sequelize
+- **Frontend**: React, CSS puro
+- **Banco de Dados**:
+  - **Desenvolvimento**: SQLite
+  - **Produção**: PostgreSQL
 - **Envio de E-mail**: AWS SES
 
 ## Instalação
 
 Para instruções detalhadas de instalação, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
 
-### Resumo da Instalação
+### Resumo da Instalação (Desenvolvimento)
 
 1. **Clone o repositório.**
-2. **Instale as dependências:**
+2. **Instale as dependências e construa o frontend:**
    ```bash
    npm install
-   cd admin-web
-   npm install
    ```
-3. **Inicie o banco de dados:**
-   ```bash
-   npm run db:start
-   ```
-4. **Configure as variáveis de ambiente:**
+3. **Configure as variáveis de ambiente (opcional para dev):**
    ```bash
    cp .env.example .env
    ```
-5. **Inicie os servidores:**
+4. **Inicie o servidor e rode as migrações:**
    ```bash
-   # Em um terminal
-   npm run dev
-
-   # Em outro terminal, no diretório admin-web
    npm start
    ```
+5. **Acesse `http://localhost:3333` no seu navegador.**
 
 ## Testes
 
-Para executar os testes, use o seguinte comando:
+Para executar os testes do backend, use o seguinte comando:
 
 ```bash
 npm test
 ```
 
-**Nota:** Os testes são executados sequencialmente para evitar problemas de condição de corrida.
-
 ## Documentação da API
 
 Para detalhes sobre os endpoints da API, consulte a [Documentação da API](API_DOCUMENTATION.md).
-
-## Próximos Passos
-
-- [ ] Implementar o reset diário de créditos no backend.
-- [ ] Adicionar gráficos e mais filtros aos relatórios.
-- [ ] Desenvolver um aplicativo nativo para Android/iOS.

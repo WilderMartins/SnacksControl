@@ -2,13 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.sequelize.query("ALTER TYPE \"enum_users_role\" ADD VALUE 'manager'");
+    // This migration is no longer needed as the 'manager' role is added
+    // in the initial create-users migration to support SQLite.
+    return Promise.resolve();
   },
 
   down: async (queryInterface, Sequelize) => {
-    // There is no easy way to remove a value from an enum in PostgreSQL.
-    // The easiest way is to create a new enum with the desired values,
-    // update the table to use the new enum, and then drop the old enum.
-    // This is a destructive operation, so we will not implement it here.
+    // Reverting this is not necessary as the 'up' migration does nothing.
+    return Promise.resolve();
   },
 };

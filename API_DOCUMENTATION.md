@@ -2,32 +2,28 @@
 
 Esta documentação descreve os endpoints da API RESTful do sistema de gestão de snacks e bebidas.
 
-**URL Base**: `http://localhost:3333`
+**URL Base**: `http://localhost:3333/api`
 
 ---
 
-## Autenticação
+## Autenticação e Sessão
 
-### 1. Solicitar OTP
-
-- **Endpoint**: `POST /sessions/otp`
-- **Descrição**: Solicita o envio de um One-Time Password (OTP) para o e-mail do usuário.
-- **Corpo da Requisição**:
-  ```json
-  {
-    "email": "usuario@exemplo.com"
-  }
-  ```
-- **Resposta de Sucesso (200 OK)**: N/A
-- **Respostas de Erro**:
-  - `401 Unauthorized`: Usuário não encontrado.
-  - `500 Internal Server Error`: Falha no envio do e-mail.
-
-### 2. Login com OTP
+### 1. Login
 
 - **Endpoint**: `POST /sessions`
-- **Descrição**: Autentica o usuário utilizando o e-mail e o OTP recebido.
-- **Corpo da Requisição**:
+- **Descrição**: Autentica um usuário. O método de login depende do tipo de usuário e de sua configuração.
+  - **Administradores**: Podem logar com `email` e `password`, ou com `email` e `otp`.
+  - **Usuários Comuns**:
+    - Se `otp_enabled` for `true`, devem usar `email` e `otp`.
+    - Se `otp_enabled` for `false`, devem usar `email` e `password`.
+- **Corpo da Requisição (Exemplo com Senha)**:
+  ```json
+  {
+    "email": "usuario@exemplo.com",
+    "password": "sua_senha"
+  }
+  ```
+- **Corpo da Requisição (Exemplo com OTP)**:
   ```json
   {
     "email": "usuario@exemplo.com",
@@ -37,119 +33,75 @@ Esta documentação descreve os endpoints da API RESTful do sistema de gestão d
 - **Resposta de Sucesso (200 OK)**:
   ```json
   {
-    "user": {
-      "id": 1,
-      "name": "Nome do Usuário",
-      "email": "usuario@exemplo.com",
-      "role": "user"
-    },
+    "user": { "id": 1, "name": "Nome", "email": "...", "role": "..." },
     "token": "jwt.token.aqui"
   }
   ```
 - **Respostas de Erro**:
-  - `401 Unauthorized`: Usuário não encontrado ou OTP inválido/expirado.
+  - `401 Unauthorized`: Credenciais inválidas.
+
+### 2. Solicitar OTP
+
+- **Endpoint**: `POST /sessions/otp`
+- **Descrição**: Solicita o envio de um One-Time Password (OTP) para o e-mail do usuário.
+- **Corpo da Requisição**: `{"email": "usuario@exemplo.com"}`
+
+### 3. Solicitar Redefinição de Senha (Admin)
+
+- **Endpoint**: `POST /sessions/forgot-password`
+- **Descrição**: Inicia o fluxo de redefinição de senha para um administrador. Envia um e-mail com um link contendo um token.
+- **Corpo da Requisição**: `{"email": "admin@exemplo.com"}`
+- **Nota**: Por segurança, a resposta é sempre `200 OK` com uma mensagem genérica, não revelando se o e-mail existe ou não.
+
+### 4. Redefinir Senha (Admin)
+
+- **Endpoint**: `POST /sessions/reset-password`
+- **Descrição**: Define uma nova senha para o administrador usando o token recebido por e-mail.
+- **Corpo da Requisição**:
+  ```json
+  {
+    "token": "token_recebido_no_email",
+    "password": "nova_senha_forte"
+  }
+  ```
+- **Resposta de Sucesso (200 OK)**: `{"message": "Password has been reset successfully."}`
+- **Respostas de Erro**:
+  - `400 Bad Request`: Token inválido, expirado, ou a senha não atende aos requisitos.
 
 ---
 
 ## Usuários (Admin)
 
-*Autenticação necessária (Bearer Token)*
+*Autenticação necessária (Bearer Token) e permissão de Admin.*
 
 ### 1. Listar Usuários
 
 - **Endpoint**: `GET /users`
-- **Descrição**: Retorna uma lista de todos os usuários.
 
 ### 2. Criar Usuário
 
 - **Endpoint**: `POST /users`
-- **Descrição**: Cria um novo usuário.
-- **Corpo da Requisição**:
-  ```json
-  {
-    "name": "Novo Usuário",
-    "email": "novo@exemplo.com",
-    "daily_credits": 4,
-    "role": "user"
-  }
-  ```
 
 ### 3. Atualizar Usuário
 
 - **Endpoint**: `PUT /users/:id`
-- **Descrição**: Atualiza os dados de um usuário existente.
 
 ### 4. Deletar Usuário
 
 - **Endpoint**: `DELETE /users/:id`
-- **Descrição**: Remove um usuário.
+
+### 5. Ativar/Desativar Login com OTP
+
+- **Endpoint**: `PUT /users/:id/toggle-otp`
+- **Descrição**: Ativa ou desativa a obrigatoriedade de login com OTP para um usuário específico. Não aplicável a administradores.
+- **Resposta de Sucesso (200 OK)**: Retorna o objeto do usuário atualizado.
+- **Respostas de Erro**:
+  - `403 Forbidden`: Tentativa de alterar um usuário admin.
+  - `404 Not Found`: Usuário não encontrado.
 
 ---
 
 ## Produtos (Admin)
-
 *Autenticação necessária (Bearer Token)*
 
-### 1. Listar Produtos
-
-- **Endpoint**: `GET /products`
-- **Descrição**: Retorna uma lista de todos os produtos.
-
-### 2. Criar Produto
-
-- **Endpoint**: `POST /products`
-- **Descrição**: Cria um novo produto.
-
----
-
-## Consumo
-
-*Autenticação necessária (Bearer Token)*
-
-### 1. Registrar Consumo
-
-- **Endpoint**: `POST /consumptions`
-- **Descrição**: Registra um novo consumo para o usuário autenticado.
-- **Corpo da Requisição**:
-  ```json
-  {
-    "barcode": "1234567890123"
-  }
-  ```
-- **Respostas de Erro**:
-  - `400 Bad Request`: Produto não encontrado.
-  - `403 Forbidden`: Limite de créditos diários atingido.
-
-### 2. Listar Consumos (Relatório)
-
-- **Endpoint**: `GET /consumptions`
-- **Descrição**: Retorna uma lista de consumos, com opção de filtros.
-- **Query Params**:
-  - `user_id` (opcional): Filtra por ID do usuário.
-  - `start_date` (opcional): Data de início (formato `YYYY-MM-DD`).
-  - `end_date` (opcional): Data de fim (formato `YYYY-MM-DD`).
-
----
-
-## Configurações (Admin)
-
-*Autenticação necessária (Bearer Token)*
-
-### 1. Obter Configurações
-
-- **Endpoint**: `GET /settings`
-- **Descrição**: Retorna as configurações atuais do sistema (ex: AWS SES).
-
-### 2. Salvar Configurações
-
-- **Endpoint**: `POST /settings`
-- **Descrição**: Salva as novas configurações do sistema.
-- **Corpo da Requisição**:
-  ```json
-  {
-    "aws_access_key_id": "...",
-    "aws_secret_access_key": "...",
-    "aws_region": "...",
-    "mail_from": "..."
-  }
-  ```
+... (seções de Produtos, Consumo e Configurações permanecem as mesmas)

@@ -13,6 +13,12 @@ class User extends Model {
         daily_credits: DataTypes.INTEGER,
         role: DataTypes.ENUM('admin', 'manager', 'user'),
         is_active: DataTypes.BOOLEAN,
+        otp_enabled: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+        password_reset_token: DataTypes.STRING,
+        password_reset_expires: DataTypes.DATE,
       },
       {
         sequelize,
